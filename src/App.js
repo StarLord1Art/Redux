@@ -3,8 +3,10 @@ import "./App.css";
 import {
   addCustomerAction,
   deleteCustomerAction,
+  fetchCustomersAction,
 } from "./store/customerReducer";
 import { fetchCustomers } from "./asyncActions/customers";
+import { AsyncAddCashAction, AsyncGetCashAction } from "./store/cashReducer";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,14 +37,27 @@ function App() {
   return (
     <div className="App">
       <div>{cash}</div>
-      <button onClick={() => addCash(Number(prompt()))}>Add money</button>
-      <button onClick={() => getCash(Number(prompt()))}>Get money</button>
-      <button onClick={() => addCustomer(prompt("Enter a customer name"))}>
-        Add customer
-      </button>
-      <button onClick={() => dispatch(fetchCustomers())}>
-        Request customers from database
-      </button>
+      <div style={{ marginTop: "5px" }}>
+        <button onClick={() => addCash(Number(prompt()))}>Add money</button>
+        <button onClick={() => dispatch(AsyncAddCashAction())}>
+          Async Add money
+        </button>
+        <button onClick={() => getCash(Number(prompt()))}>Get money</button>
+        <button onClick={() => dispatch(AsyncGetCashAction())}>
+          Async Get money
+        </button>
+      </div>
+      <div style={{ marginTop: "15px" }}>
+        <button onClick={() => addCustomer(prompt("Enter a customer name"))}>
+          Add customer
+        </button>
+        <button onClick={() => dispatch(fetchCustomers())} disabled>
+          Request customers from database
+        </button>
+        <button onClick={() => dispatch(fetchCustomersAction())}>
+          Fetch customers from API
+        </button>
+      </div>
       {customers.length > 0 ? (
         <div style={{ width: "25%", margin: "0 auto" }}>
           <ul>
@@ -54,7 +69,7 @@ function App() {
           </ul>
         </div>
       ) : (
-        <h2>Клиенты отсутствуют!</h2>
+        <h2>No Clients!</h2>
       )}
     </div>
   );
